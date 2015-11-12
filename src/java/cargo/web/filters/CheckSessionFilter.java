@@ -36,7 +36,7 @@ public class CheckSessionFilter implements Filter {
     // this value is null, this filter instance is not currently
     // configured. 
     private FilterConfig filterConfig = null;
-
+ 
     public CheckSessionFilter() {
     }
 
