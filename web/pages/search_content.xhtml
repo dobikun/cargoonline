@@ -1,0 +1,59 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html" 
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:head>
+        <title>Title maintemp</title> 
+    </h:head>
+    
+    <h:body>
+        <ui:composition template="/templates/template.xhtml">
+            
+            <ui:define name="title">
+                #{msg.book_list}
+            </ui:define>
+
+            <ui:define name="total_products"> </ui:define>
+            <ui:define name="paginator"> </ui:define>
+            
+            <ui:define name="main">
+                <div class="col-md-8">  
+                    <h:form>
+                        <h:dataTable value="#{searchController.currentCargoList}" var="cargo"> 
+                            <h:column>
+                                <h:graphicImage  value="/Image?id=#{cargo.id}" style="align: middle;" />
+
+                                <div class="col-md-20">
+                                    <h2> #{cargo.name}</h2>
+                                    <p> #{cargo.desc}</p>
+                                    <br />
+                                </div>
+
+                                <h:outputText value="#{param['letter']}" />
+                                
+                                <div class="input-mysize">
+                                    <h:commandButton action="/pages/maintemp?faces-redirect=true" class="btn btn-lg btn-primary btn-block" value="Back to main" />
+                                </div>
+                                
+                                 <div class="input-mysize">
+                                    <h:commandButton action="/pages/search_all?faces-redirect=true" class="btn btn-lg btn-primary btn-block" value="Back to search" />
+                                </div>
+                                 
+                            </h:column>
+
+                            <h:column>
+                                <h2>TEST:  #{cargo.cars}</h2>
+                                <h2>TEST:  #{cargo.company}</h2>
+                                <h2>TEST:  #{cargo.cargo_type}</h2>
+                                <h2>TEST:  #{cargo.tripCount}</h2>
+                            </h:column>
+                        </h:dataTable>
+                    </h:form>
+                </div>  
+            </ui:define>
+            
+        </ui:composition>
+    </h:body>
+</html>

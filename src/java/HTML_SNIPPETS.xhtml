@@ -1,0 +1,11 @@
+<h:dataTable value="#{carType.typeList}" var="v">
+                <h:column>
+                    <div class="list-group">
+                    <h:link value="#{v.name}" class="list-group-item input-lg input-mysize">
+
+                        <f:param name="type_id" value="#{v.id}"/>
+
+                    </h:link>
+                        </div>
+                </h:column>
+            </h:dataTable>

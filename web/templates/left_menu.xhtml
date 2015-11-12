@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html" 
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:head>     
+        <meta charset="utf-8"></meta>
+        <title> </title>
+    </h:head>
+    
+    <h:body>
+        <h:form>
+            <div class="col-md-2">
+                <!-- Menu -->    
+                <h2> Heading</h2>
+                <div class="list-group">
+                    
+                #{user.setParametr( param['id'] )}
+                <!--<h:outputLabel value="#{user.parametr}"/>-->
+  
+                <ui:repeat value="#{carType.typeList}" var="v">   
+
+                    <h:commandButton action="#{searchController.fillSearchByCar()}" value="#{v.name}" class="list-group-item input-mysize #{user.parametr == v.id ? 'active' : ''}">
+                        <f:param name="id" value="#{v.id}"/>
+                    </h:commandButton>
+
+                </ui:repeat>
+                    </div>
+                 <!-- End of menu -->   
+            </div>
+        </h:form>
+    </h:body>
+</html>
+        
