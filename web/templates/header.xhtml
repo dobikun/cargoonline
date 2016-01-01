@@ -48,8 +48,8 @@
                     <h:form class="navbar-form navbar-right form-inline" role="form">
                         <div class="form-group ">
 
-                            
-                            <h:inputText id="search_string" p:placeholder="Email" class="form-control"  size="58"  value="#{searchController.searchString}"/>
+                            <h:inputText id="search_string" p:placeholder="Email" class="form-control"  size="58"  value="#{searchController.searchString}" />
+         
                             &#160;
                             
                             <h:selectOneMenu value="#{searchController.searchType}" class="form-control">
@@ -57,7 +57,11 @@
                             </h:selectOneMenu>
                              
                             &#160;
-                            <h:commandButton  class="btn btn-success" value="#{msg.search}" action="#{searchController.fillCargoBySearch()}" />
+                            <h:commandLink  class="btn btn-success" value="#{msg.search}">
+                        
+                            <!-- AJAX request -->
+                                <f:ajax  execute="@form" render=":mainContent @form :paginator" listener="#{searchController.fillCargoBySearch()}"/>
+                            </h:commandLink>
                         </div>
                     </h:form>
                  </div>
@@ -74,8 +78,11 @@
                     <ul class="nav nav-justified">
                         <ui:repeat value="#{searchController.letters}" var="letter" >
                             <li>
-                                <h:commandLink action="#{searchController.letterSearch()}" value="#{letter}" >
+                                <h:commandLink value="#{letter}" >
                                     <f:param name="letter" value="#{letter}"/>
+                                    
+                                    <!-- AJAX request -->
+                                    <f:ajax  event="click" render=":mainContent @form :paginator" listener="#{searchController.letterSearch()}"/>
                                 </h:commandLink>
                             </li>  
                         </ui:repeat>

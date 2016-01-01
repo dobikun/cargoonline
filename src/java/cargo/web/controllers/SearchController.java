@@ -359,6 +359,7 @@ public class SearchController implements Serializable{
         }
     }
      
+     /*
      private void searchSQL(String sql) {
         //System.out.print(sql);
    
@@ -409,7 +410,7 @@ public class SearchController implements Serializable{
             }
         }
     }
-    
+    */
     
     
     
@@ -435,6 +436,14 @@ public class SearchController implements Serializable{
     }
        
     public String letterSearch() {
+        
+        //-----
+        currentCargoList = null;  
+        //-----
+        pageNumbers = new ArrayList<Integer>();
+        //
+        selectedSearchPageNumber = 1;
+        
         
         Map<String, String> param = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
         String searchLetter = param.get("letter");
@@ -528,6 +537,10 @@ public class SearchController implements Serializable{
      
      public String fillCargoBySearch() {
          
+        //-----
+        currentCargoList = null;  
+        //-----
+        pageNumbers = new ArrayList<Integer>();
         //
         selectedSearchPageNumber = 1;
 
