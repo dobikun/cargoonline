@@ -39,14 +39,49 @@ public class SearchController implements Serializable{
     private ArrayList<Cargo> currentCargoList;
     private ArrayList<Cargo> currentCargoSearchList;
     private String searchString;
-    private long totalBooksCount; // общее кол-во книг (не на текущей странице, а всего)
+    
+    private long totalCount; // общее кол-во книг (не на текущей странице, а всего)
+        //-
+         private long totalSearchCount;
+        //-
+            //--
+            private long totalCategorySearchCount;
+            //--
     private ArrayList<Integer> pageNumbers = new ArrayList<Integer>(); // общее кол-во не на текущей странице, а всего
+        //-
+        private ArrayList<Integer> pageSearchNumbers = new ArrayList<Integer>();
+        //-
+            //--
+            private ArrayList<Integer> pageCategorySearchNumbers = new ArrayList<Integer>();
+            //--
     private String currentSql;// последний выполнный sql без добавления limit
+        //-
+        private String currentSearchSql;// последний выполнный sql без добавления limit
+        //-
+            //--
+            private String currentCategorySearchSql;// последний выполнный sql без добавления limit
+            //--
     private long selectedPageNumber = 1; // выбранный номер страницы в постраничной навигации
+        //-
+        private long selectedSearchPageNumber = 1;
+        //-
+            //--
+            private long selectedCategoryPageNumber = 1;
+            //--
 
     public SearchController() {
         dropMenuSearchType();
         cargoAll();
+    }
+    
+    public void renewCurrentCargoList(){
+        if(currentCargoSearchList == null){
+            //Fill full cargo list 
+            cargoAll();
+        } else {
+            //Clear entry for search result 
+            currentCargoList = new ArrayList<Cargo>();
+        }
     }
     
     private void cargoTableSQL(String sql) {
@@ -65,17 +100,16 @@ public class SearchController implements Serializable{
             stmt = conn.createStatement();
             
             System.out.println(requestFromPager);
-            if (!requestFromPager) {
-
+            //if (!requestFromPager) {
                 rs = stmt.executeQuery(sqlBuilder.toString());
                 rs.last();
 
-                totalBooksCount = rs.getRow();
-                fillPageNumbers(totalBooksCount, booksOnPage);
-            }
+                totalCount = rs.getRow();
+                fillPageNumbers(totalCount, booksOnPage);
+            //}
             
-            System.out.print("TESTTTTTTTTTTTTT - " + totalBooksCount);
-            if (totalBooksCount > booksOnPage) {
+            System.out.print("TESTTTTTTTTTTTTT - " + totalCount);
+            if (totalCount > booksOnPage) {
                  sqlBuilder.append(" limit ").append(selectedPageNumber * booksOnPage - booksOnPage).append(",").append(booksOnPage);
             }
             
@@ -123,12 +157,88 @@ public class SearchController implements Serializable{
         }
     }
     
+    //SEARCH QUERTY
     private void cargoSearchSQL(String sql) {
         
         // System.out.print(sql);
         StringBuilder sqlBuilder = new StringBuilder(sql);
-        currentSql = sql;
+        //-
+        currentSearchSql = sql;
+        //-
+        Statement stmt = null;
+        ResultSet rs = null;
+        Connection conn = null;
         
+        try {
+            
+            conn = Database.getConnection();
+            stmt = conn.createStatement();
+
+                //Pagination
+                rs = stmt.executeQuery(sqlBuilder.toString());
+                rs.last();
+
+                totalSearchCount = rs.getRow();
+                fillSearchPageNumbers(totalSearchCount, booksOnPage);      
+                //
+                
+            if (totalSearchCount > booksOnPage) {
+                 sqlBuilder.append(" limit ").append(selectedSearchPageNumber * booksOnPage - booksOnPage).append(",").append(booksOnPage);
+            }
+            
+            System.out.println("HRRRRRR" + sqlBuilder.toString());
+            
+            rs = stmt.executeQuery(sqlBuilder.toString());
+            
+            currentCargoSearchList = new ArrayList<Cargo>();
+            
+            while (rs.next()) {
+                Cargo cargo = new Cargo();
+                cargo.setId(rs.getLong("id"));
+                cargo.setCompanyId(rs.getInt("company_id"));
+                cargo.setCtypeId(rs.getInt("ctype_id"));
+                cargo.setDateYear(rs.getInt("date_year"));
+                cargo.setDesc(rs.getString("desc"));
+                cargo.setName(rs.getString("name"));
+                cargo.setTripCount(rs.getInt("trip_count"));
+                cargo.setTripNumber(rs.getInt("trip_number"));
+                
+                cargo.setCars(rs.getString("cars"));
+                cargo.setCompany(rs.getString("company"));
+                cargo.setCargo_type(rs.getString("cargo_type"));
+                
+                currentCargoSearchList.add(cargo);
+            }
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(SearchController.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if (stmt != null) {
+                    stmt.close();
+                }
+                if (rs != null) {
+                    rs.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(SearchController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+    
+    //---------------------------------
+    //CAR CATEGORY
+    /*
+     private void categorySearchSQL(String sql) {
+        
+        // System.out.print(sql);
+        StringBuilder sqlBuilder = new StringBuilder(sql);
+        //-
+        currentSearchSql = sql;
+        //-
         Statement stmt = null;
         ResultSet rs = null;
         Connection conn = null;
@@ -139,16 +249,16 @@ public class SearchController implements Serializable{
             stmt = conn.createStatement();
             
             
-
+            if(!requestFromSearchPager) {
                 rs = stmt.executeQuery(sqlBuilder.toString());
                 rs.last();
 
-                totalBooksCount = rs.getRow();
-                fillPageNumbers(totalBooksCount, booksOnPage);
+                totalCategorySearchCount = rs.getRow();
+                fillSearchPageNumbers(totalCategorySearchCount, booksOnPage);
+            }
             
-            
-            if (totalBooksCount > booksOnPage) {
-                 sqlBuilder.append(" limit ").append(selectedPageNumber * booksOnPage - booksOnPage).append(",").append(booksOnPage);
+            if (totalCategorySearchCount > booksOnPage) {
+                 sqlBuilder.append(" limit ").append(selectedCategoryPageNumber * booksOnPage - booksOnPage).append(",").append(booksOnPage);
             }
             
             System.out.println(sqlBuilder.toString());
@@ -193,7 +303,8 @@ public class SearchController implements Serializable{
             }
         }
     }
-    
+    //---------------------------------
+    */
     
     
     
@@ -306,6 +417,11 @@ public class SearchController implements Serializable{
     
     public void cargoAll() {
 
+        //------
+        pageSearchNumbers = new ArrayList<Integer>();     
+        //-----
+        currentCargoSearchList = null; 
+        
         cargoTableSQL(
             "select g.id, g.company_id, g.ctype_id, g.date_year, g.desc, g.name, g.trip_count, g.trip_number, g.image, "
             + " cs.name as cars,"
@@ -361,6 +477,9 @@ public class SearchController implements Serializable{
     
     public String fillSearchContentPage() {
         
+        //-----
+        currentCargoSearchList = null; 
+        
         Map<String, String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
         Integer cargo_id = Integer.valueOf(params.get("cargo_id"));
    
@@ -381,6 +500,13 @@ public class SearchController implements Serializable{
     
      public String fillSearchByCar() {
         
+        //-----
+        currentCargoList = null;  
+        //-----
+        pageNumbers = new ArrayList<Integer>();
+        //
+        selectedSearchPageNumber = 1;
+         
         Map<String, String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
         Integer id = Integer.valueOf(params.get("id"));
    
@@ -401,6 +527,9 @@ public class SearchController implements Serializable{
     }
      
      public String fillCargoBySearch() {
+         
+        //
+        selectedSearchPageNumber = 1;
 
         if (searchString.trim().length() == 0) {
             cargoAll();
@@ -478,19 +607,57 @@ public class SearchController implements Serializable{
         }
     }
     
+    //-
+    private void fillSearchPageNumbers(long totalBooksCount, int booksCountOnPage) {
+
+        int pageCount = booksCountOnPage > 0 ? (int) ((totalBooksCount / booksCountOnPage) + 1) : 0;
+
+        pageSearchNumbers.clear();
+        for (int i = 1; i <= pageCount; i++) {
+            pageSearchNumbers.add(i);
+        }
+    }
+    //-
+        //--
+        private void fillCategorySearchPageNumbers(long totalBooksCount, int booksCountOnPage) {
+
+            int pageCount = booksCountOnPage > 0 ? (int) ((totalBooksCount / booksCountOnPage) + 1) : 0;
+
+            pageCategorySearchNumbers.clear();
+            for (int i = 1; i <= pageCount; i++) {
+                pageCategorySearchNumbers.add(i);
+            }
+        }
+        //--
+    
     public void selectPage() {
+        
         Map<String, String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
         selectedPageNumber = Integer.valueOf(params.get("page_number"));
         requestFromPager = true;
         cargoTableSQL(currentSql);
     }
     
-    public void selectSearchPage() {
-        Map<String, String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
-        selectedPageNumber = Integer.valueOf(params.get("page_number"));
-        requestFromSearchPager = true;
-        cargoSearchSQL(currentSql);
-    }
+        //-
+        public void selectSearchPage() {
+   
+            
+            Map<String, String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+            selectedSearchPageNumber = Integer.valueOf(params.get("page_number"));
+            requestFromSearchPager = true;
+            cargoSearchSQL(currentSearchSql);
+        }
+        //-
+
+        //-
+        public ArrayList<Integer> getPageSearchNumbers() {
+            return pageSearchNumbers;
+        }
+
+        public void setPageSearchNumbers(ArrayList<Integer> pageSearchNumbers) {
+            this.pageSearchNumbers = pageSearchNumbers;
+        }
+        //-
     
     public ArrayList<Integer> getPageNumbers() {
         return pageNumbers;

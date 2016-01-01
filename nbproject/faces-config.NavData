@@ -2,16 +2,19 @@
 <Scene Scope="Project" version="2">
     <Scope Scope="Faces Configuration Only"/>
     <Scope Scope="Project">
-        <Node id="pages/test.jsp" x="150" y="600" zoom="true"/>
         <Node id="index.xhtml" x="245" y="258" zoom="false"/>
-        <Node id="templates/left_menu.xhtml" x="400" y="300" zoom="true"/>
         <Node id="templates/total_products.xhtml" x="650" y="150" zoom="true"/>
         <Node id="pages/maintemp.xhtml" x="650" y="300" zoom="true"/>
         <Node id="pages/main.xhtml" x="202" y="64" zoom="false"/>
+        <Node id="pages/search_content.xhtml" x="900" y="300" zoom="true"/>
+        <Node id="templates/pagination.xhtml" x="650" y="450" zoom="true"/>
+        <Node id="templates/main.xhtml" x="150" y="450" zoom="true"/>
+        <Node id="pages/test.jsp" x="150" y="600" zoom="true"/>
+        <Node id="templates/left_menu.xhtml" x="400" y="300" zoom="true"/>
         <Node id="templates/header.xhtml" x="150" y="300" zoom="true"/>
         <Node id="templates/slider.xhtml" x="900" y="150" zoom="true"/>
+        <Node id="pages/search_all.xhtml" x="1150" y="150" zoom="true"/>
         <Node id="templates/template.xhtml" x="400" y="150" zoom="true"/>
-        <Node id="templates/main.xhtml" x="150" y="450" zoom="true"/>
         <Node id="pages/content.xhtml" x="400" y="450" zoom="true"/>
     </Scope>
     <Scope Scope="All Faces Configurations"/>

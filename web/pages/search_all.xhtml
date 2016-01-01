@@ -26,7 +26,7 @@
                         <div class="text-center">
                             
                             <h:form>
-                                <ui:repeat value="#{searchController.pageNumbers}" var="pageNumber" >
+                                <ui:repeat value="#{searchController.pageSearchNumbers}" var="pageNumber" >
                                     <h:commandLink value="#{pageNumber}" action="#{searchController.selectSearchPage()}" class="btn btn-default #{param['page_number'] == pageNumber ? 'active' : ''}">
                                         <f:param name="page_number" value="#{pageNumber}" />
                                     </h:commandLink>

@@ -13,18 +13,25 @@
         <h:form>
             <div class="col-md-2">
                 <!-- Menu -->    
-                <h2> Heading</h2>
+                <h2> 
+                    <h:commandLink  class="btn btn-lg btn-primary btn-block" value="Home">
+                       
+                        <!-- AJAX request -->
+                        <f:ajax  event="click" render=":mainContent @form :paginator" listener="#{searchController.cargoAll()}"/>
+                    </h:commandLink>
+                </h2>
                 <div class="list-group">
                     
                 #{user.setParametr( param['id'] )}
-                <!--<h:outputLabel value="#{user.parametr}"/>-->
+              
   
                 <ui:repeat value="#{carType.typeList}" var="v">   
-
-                    <h:commandButton action="#{searchController.fillSearchByCar()}" value="#{v.name}" class="list-group-item input-mysize #{user.parametr == v.id ? 'active' : ''}">
+                    <h:commandLink  value="#{v.name}" class="list-group-item input-mysize #{user.parametr == v.id ? 'active' : ''}">
                         <f:param name="id" value="#{v.id}"/>
-                    </h:commandButton>
-
+                   
+                        <!-- AJAX request -->
+                        <f:ajax  event="click" render=":mainContent @form :paginator" listener="#{searchController.fillSearchByCar()}"/>
+                    </h:commandLink>
                 </ui:repeat>
                     </div>
                  <!-- End of menu -->   

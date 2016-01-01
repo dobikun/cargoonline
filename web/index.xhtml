@@ -23,21 +23,18 @@
                 
                 <h:inputText class="form-control" p:placeholder="Login" id="username" required="true" requiredMessage="#{msg.login_required}"  value="#{user.username}">
                      <f:validator validatorId="cargo.web.validators.LoginValidator"/>
+                     
+                     <!-- AJAX request -->
+                     <f:ajax event="keyup" render="loginError"/>
                 </h:inputText> 
                     
                 <h:inputSecret  class="form-control" />
 
-                <!-- 
-                <input type="text" class="form-control" placeholder="Name"  value="#{user.username}"></input> 
-                <input type="password" class="form-control" placeholder="Password" ></input>
-                -->
               <h:commandButton action="pages/maintemp?faces-redirect=true" class="btn btn-lg btn-primary btn-block" value="Войти" />
-              
 
-              
               <br />
 
-              <h:message for="username" class="alert alert-danger" role="alert"/>
+              <h:message id="loginError" for="username" class="alert alert-danger" role="alert"/>
    
             </h:form>
         </div> <!-- /container -->
