@@ -5,15 +5,13 @@
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:p="http://xmlns.jcp.org/jsf/passthrough">
     <h:head>     
-            <meta charset="utf-8"></meta>
+        <meta charset="utf-8"></meta>
 
-            <title>#{msg.welcome_title}</title>
+        <title>#{msg.welcome_title}</title>
 
-
-             <h:outputStylesheet library="css" name="bootstrap.min.css"  />
-             <h:outputStylesheet library="css" name="signin.css"  />
-
-          
+        <h:outputScript library="js" name="common.js" target="head"/>
+        <h:outputStylesheet library="css" name="bootstrap.min.css"  />
+        <h:outputStylesheet library="css" name="signin.css"  />
     </h:head>
     <h:body>
         
@@ -30,7 +28,7 @@
                     
                 <h:inputSecret  class="form-control" />
 
-              <h:commandButton action="pages/maintemp?faces-redirect=true" class="btn btn-lg btn-primary btn-block" value="Войти" />
+              <h:commandButton action="pages/maintemp?faces-redirect=true" class="btn btn-lg btn-primary btn-block" value="Войти" onclick="return checkValue(this.form, '#{msg.login_required}');" />
 
               <br />
 

@@ -59,8 +59,8 @@
                             &#160;
                             <h:commandLink  class="btn btn-success" value="#{msg.search}">
                         
-                            <!-- AJAX request -->
-                                <f:ajax  execute="@form" render=":mainContent @form :paginator" listener="#{searchController.fillCargoBySearch()}"/>
+                                <!-- AJAX request -->
+                                <f:ajax  execute="@form" render=":mainContent @form :paginator :topNav :leftMenu :total_products" listener="#{searchController.fillCargoBySearch()}"/>
                             </h:commandLink>
                         </div>
                     </h:form>
@@ -74,15 +74,15 @@
             <div class="masthead">
                 <hr />
 
-                <h:form>
+                <h:form id="topNav">
                     <ul class="nav nav-justified">
-                        <ui:repeat value="#{searchController.letters}" var="letter" >
-                            <li>
-                                <h:commandLink value="#{letter}" >
+                        <ui:repeat value="#{searchController.letters}" var="letter">
+                            <li class="#{letter == searchController.searchLetter ? 'active':''}">
+                                <h:commandLink value="#{letter}">
                                     <f:param name="letter" value="#{letter}"/>
                                     
                                     <!-- AJAX request -->
-                                    <f:ajax  event="click" render=":mainContent @form :paginator" listener="#{searchController.letterSearch()}"/>
+                                    <f:ajax  event="click" render=":mainContent @form :paginator :leftMenu :total_products" listener="#{searchController.letterSearch()}"/>
                                 </h:commandLink>
                             </li>  
                         </ui:repeat>

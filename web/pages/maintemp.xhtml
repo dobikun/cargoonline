@@ -11,19 +11,18 @@
     <h:body>
         <ui:composition template="/templates/template.xhtml">
 
-            
-            
-            
             <ui:define name="title">
                 #{msg.book_list}
             </ui:define>
             
             <ui:define name="total_products">
-                <div class="col-md-20">
-                    <!-- Renew cargo list -->
-                    #{searchController.renewCurrentCargoList()}
-                    <kbd> #{msg.book_count} #{searchController.currentCargoList.size()} </kbd>
-                </div>
+                <h:form id="total_products">
+                    <div class="col-md-20">
+                        <!-- Renew cargo list -->
+                        #{searchController.renewCurrentCargoList()}
+                        <kbd> #{msg.book_count} #{searchController.totalRowCount()} </kbd>
+                    </div>
+                </h:form>
             </ui:define>
             
             <ui:define name="paginator"> 
@@ -32,22 +31,22 @@
                         <div class="text-center">
                             <h:form id="paginator">
                                 <ui:repeat value="#{searchController.pageNumbers}" var="pageNumber" >
-                                    <h:commandLink value="#{pageNumber}" class="btn btn-default #{param['page_number'] == pageNumber ? 'active' : ''}">
+                                    <h:commandLink value="#{pageNumber}" class="btn btn-default #{pageNumber == searchController.selectedPageNumber ? 'active' : ''}">
                                         <f:param name="page_number" value="#{pageNumber}" />
                                         
                                         <!-- AJAX request -->
-                                        <f:ajax  event="click" render=":mainContent @form :paginator" listener="#{searchController.selectPage()}"/>
+                                        <f:ajax event="click" render=":mainContent @form :paginator" listener="#{searchController.selectPage()}"/>
                                     </h:commandLink>
                                 </ui:repeat>
                                 
                                 <!-- -->
                                 
                                 <ui:repeat value="#{searchController.pageSearchNumbers}" var="pageNumber" >
-                                    <h:commandLink value="#{pageNumber}" action="#{searchController.selectSearchPage()}" class="btn btn-default #{param['page_number'] == pageNumber ? 'active' : ''}">
+                                    <h:commandLink value="#{pageNumber}" class="btn btn-default #{pageNumber == searchController.selectedSearchPageNumber ? 'active' : ''}">
                                         <f:param name="page_number" value="#{pageNumber}" />
                                        
                                         <!-- AJAX request -->
-                                        <f:ajax  event="click" render=":mainContent @form :paginator" listener="#{searchController.selectSearchPage()}"/>
+                                        <f:ajax event="click" render=":mainContent @form :paginator" listener="#{searchController.selectSearchPage()}"/>
                                     </h:commandLink>
                                 </ui:repeat>
 
@@ -70,6 +69,10 @@
             
              <ui:define name="main">    
                 <h:form id="mainContent">
+                    <div class="col-md-20 #{searchController.totalRowCount() == 0 ? '' : 'notFound'}">
+                        <h2> <p>  Nothing found... </p> </h2>
+                    </div>
+                    
                     <ui:repeat value="#{searchController.currentCargoList}" var="cargo" >
                         <div class="col-md-20">
                             <h2> <p> #{cargo.name}</p> </h2>

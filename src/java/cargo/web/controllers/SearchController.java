@@ -39,10 +39,17 @@ public class SearchController implements Serializable{
     private ArrayList<Cargo> currentCargoList;
     private ArrayList<Cargo> currentCargoSearchList;
     private String searchString;
-    
+    //02.01
+    private char searchLetter; //Selected letter
+    //02.01
+    private Integer typeId; //typeList 
+
+
     private long totalCount; // общее кол-во книг (не на текущей странице, а всего)
+
         //-
          private long totalSearchCount;
+
         //-
             //--
             private long totalCategorySearchCount;
@@ -422,6 +429,9 @@ public class SearchController implements Serializable{
         pageSearchNumbers = new ArrayList<Integer>();     
         //-----
         currentCargoSearchList = null; 
+        //02.01
+        searchLetter = '*';
+        typeId = 0;
         
         cargoTableSQL(
             "select g.id, g.company_id, g.ctype_id, g.date_year, g.desc, g.name, g.trip_count, g.trip_number, g.image, "
@@ -434,6 +444,7 @@ public class SearchController implements Serializable{
                 + " inner join cargo_type ct on g.ctype_id = ct.id"
         );
     }
+    
        
     public String letterSearch() {
         
@@ -443,10 +454,13 @@ public class SearchController implements Serializable{
         pageNumbers = new ArrayList<Integer>();
         //
         selectedSearchPageNumber = 1;
-        
+        //02.01
+        typeId = 0;
+        //02.01
+        totalCount = 0;
         
         Map<String, String> param = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
-        String searchLetter = param.get("letter");
+        searchLetter = param.get("letter").charAt(0);
         
         cargoSearchSQL(
             "select g.id, g.company_id, g.ctype_id, g.date_year, g.desc, g.name, g.trip_count, g.trip_number, g.image, "
@@ -515,9 +529,18 @@ public class SearchController implements Serializable{
         pageNumbers = new ArrayList<Integer>();
         //
         selectedSearchPageNumber = 1;
+        //02.01
+        selectedPageNumber = 1;
+        //02.01
+        searchLetter = '*';
+        //02.01
+        typeId = 0;
+        //02.01
+        totalCount = 0;
+        
          
         Map<String, String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
-        Integer id = Integer.valueOf(params.get("id"));
+        typeId = Integer.valueOf(params.get("id"));
    
         cargoSearchSQL(
             "select g.id, g.company_id, g.ctype_id, g.date_year, g.desc, g.name, g.trip_count, g.trip_number, g.image, "
@@ -528,11 +551,11 @@ public class SearchController implements Serializable{
                 + " inner join cars cs on g.car_id = cs.id" 
                 + " inner join company cy on g.company_id = cy.id" 
                 + " inner join cargo_type ct on g.ctype_id = ct.id"
-            + " where g.car_id= " + id + ""
+            + " where g.car_id= " + typeId + ""
         );
         
         
-        return "/pages/search_all?id=" + id + "&faces-redirect=true";
+        return "/pages/search_all?id=" + typeId + "&faces-redirect=true";
     }
      
      public String fillCargoBySearch() {
@@ -543,6 +566,14 @@ public class SearchController implements Serializable{
         pageNumbers = new ArrayList<Integer>();
         //
         selectedSearchPageNumber = 1;
+        //02.01
+        searchLetter = '*';
+        //02.01
+        typeId = 0;
+        //02.01
+        totalCount = 0;
+        
+        
 
         if (searchString.trim().length() == 0) {
             cargoAll();
@@ -574,7 +605,7 @@ public class SearchController implements Serializable{
     
     public Character[] getLetters() {
         Character[] letters = new Character[25];
-        letters[0] = 'Q';
+        letters[0] = 'A';
         letters[1] = 'W';
         letters[2] = 'E';
         letters[3] = 'R';
@@ -650,7 +681,7 @@ public class SearchController implements Serializable{
         requestFromPager = true;
         cargoTableSQL(currentSql);
     }
-    
+
         //-
         public void selectSearchPage() {
    
@@ -660,8 +691,17 @@ public class SearchController implements Serializable{
             requestFromSearchPager = true;
             cargoSearchSQL(currentSearchSql);
         }
+        
+        
+        public Long totalRowCount() {
+            if(totalCount != 0){
+                return totalCount;
+            } else {
+                return totalSearchCount;
+            }
+        }
+        
         //-
-
         //-
         public ArrayList<Integer> getPageSearchNumbers() {
             return pageSearchNumbers;
@@ -706,7 +746,56 @@ public class SearchController implements Serializable{
     public Map<String, SearchType> getSearchList() {
         return searchList;
     }
+    
+    //02.01
+    public char getSearchLetter() {
+        return searchLetter;
+    }
+    public void setSearchLetter(char searchLetter) {
+        this.searchLetter = searchLetter;
+    }
+    
+    //02.01
+    public Integer getTypeId() {
+        return typeId;
+    }
+    public void setTypeId(Integer typeId) {
+        this.typeId = typeId;
+    }
 
+    //02.01
+    public long getSelectedSearchPageNumber() {
+        return selectedSearchPageNumber;
+    }
+    public void setSelectedSearchPageNumber(long selectedSearchPageNumber) {
+        this.selectedSearchPageNumber = selectedSearchPageNumber;
+    }
+    
+    //02.01
+    public long getSelectedPageNumber() {
+        return selectedPageNumber;
+    }
+    public void setSelectedPageNumber(long selectedPageNumber) {
+        this.selectedPageNumber = selectedPageNumber;
+    }
+    
+    //02.01
+    public long getTotalCount() {
+        return totalCount;
+    }
+    public void setTotalCount(long totalCount) {
+        this.totalCount = totalCount;
+    }
+    
+    //02.01
+    public long getTotalSearchCount() {
+        return totalSearchCount;
+    }
+
+    public void setTotalSearchCount(long totalSearchCount) {
+        this.totalSearchCount = totalSearchCount;
+    }
+    
     public byte[] getImage(int id) {
         
         Statement stmt = null;
@@ -787,5 +876,4 @@ public class SearchController implements Serializable{
         return content;
 
     }
-    
 }
