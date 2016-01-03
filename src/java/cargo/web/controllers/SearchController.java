@@ -574,18 +574,7 @@ public class SearchController implements Serializable{
         }
     }
     //-
-        //--
-        private void fillCategorySearchPageNumbers(long totalBooksCount, int booksCountOnPage) {
 
-            int pageCount = booksCountOnPage > 0 ? (int) ((totalBooksCount / booksCountOnPage) + 1) : 0;
-
-            pageCategorySearchNumbers.clear();
-            for (int i = 1; i <= pageCount; i++) {
-                pageCategorySearchNumbers.add(i);
-            }
-        }
-        //--
-    
     public void selectPage() {
         
         Map<String, String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
