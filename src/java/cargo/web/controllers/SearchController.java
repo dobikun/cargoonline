@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package cargo.web.controllers;
 
 import cargo.web.beans.Cargo;
@@ -45,36 +40,21 @@ public class SearchController implements Serializable{
     private Integer typeId; //typeList 
 
 
-    private int totalCount; // общее кол-во книг (не на текущей странице, а всего)
+    private int totalCount; // total cargo entries
+    private int totalSearchCount;
 
-        //-
-         private int totalSearchCount;
-
-        //-
-            //--
-            private long totalCategorySearchCount;
-            //--
-    private ArrayList<Integer> pageNumbers = new ArrayList<Integer>(); // общее кол-во не на текущей странице, а всего
+    private ArrayList<Integer> pageNumbers = new ArrayList<Integer>(); // total pagination numbers
         //-
         private ArrayList<Integer> pageSearchNumbers = new ArrayList<Integer>();
         //-
-            //--
-            private ArrayList<Integer> pageCategorySearchNumbers = new ArrayList<Integer>();
-            //--
-    private String currentSql;// последний выполнный sql без добавления limit
+    private String currentSql;// last sql query without limit
         //-
-        private String currentSearchSql;// последний выполнный sql без добавления limit
+        private String currentSearchSql;// last search sql query without limit
         //-
-            //--
-            private String currentCategorySearchSql;// последний выполнный sql без добавления limit
-            //--
-    private long selectedPageNumber = 1; // выбранный номер страницы в постраничной навигации
+    private long selectedPageNumber = 1; // selected page namber in pagination
         //-
         private long selectedSearchPageNumber = 1;
         //-
-            //--
-            private long selectedCategoryPageNumber = 1;
-            //--
 
     public SearchController() {
         dropMenuSearchType();
@@ -114,8 +94,7 @@ public class SearchController implements Serializable{
                 totalCount = rs.getRow();
                 fillPageNumbers(totalCount, booksOnPage);
             //}
-            
-            System.out.print("TESTTTTTTTTTTTTT - " + totalCount);
+
             if (totalCount > booksOnPage) {
                  sqlBuilder.append(" limit ").append(selectedPageNumber * booksOnPage - booksOnPage).append(",").append(booksOnPage);
             }
@@ -235,86 +214,7 @@ public class SearchController implements Serializable{
             }
         }
     }
-    
-    //---------------------------------
-    //CAR CATEGORY
-    /*
-     private void categorySearchSQL(String sql) {
-        
-        // System.out.print(sql);
-        StringBuilder sqlBuilder = new StringBuilder(sql);
-        //-
-        currentSearchSql = sql;
-        //-
-        Statement stmt = null;
-        ResultSet rs = null;
-        Connection conn = null;
-        
-        try {
-            
-            conn = Database.getConnection();
-            stmt = conn.createStatement();
-            
-            
-            if(!requestFromSearchPager) {
-                rs = stmt.executeQuery(sqlBuilder.toString());
-                rs.last();
 
-                totalCategorySearchCount = rs.getRow();
-                fillSearchPageNumbers(totalCategorySearchCount, booksOnPage);
-            }
-            
-            if (totalCategorySearchCount > booksOnPage) {
-                 sqlBuilder.append(" limit ").append(selectedCategoryPageNumber * booksOnPage - booksOnPage).append(",").append(booksOnPage);
-            }
-            
-            System.out.println(sqlBuilder.toString());
-            
-            rs = stmt.executeQuery(sqlBuilder.toString());
-            
-            currentCargoSearchList = new ArrayList<Cargo>();
-            
-            while (rs.next()) {
-                Cargo cargo = new Cargo();
-                cargo.setId(rs.getLong("id"));
-                cargo.setCompanyId(rs.getInt("company_id"));
-                cargo.setCtypeId(rs.getInt("ctype_id"));
-                cargo.setDateYear(rs.getInt("date_year"));
-                cargo.setDesc(rs.getString("desc"));
-                cargo.setName(rs.getString("name"));
-                cargo.setTripCount(rs.getInt("trip_count"));
-                cargo.setTripNumber(rs.getInt("trip_number"));
-                
-                cargo.setCars(rs.getString("cars"));
-                cargo.setCompany(rs.getString("company"));
-                cargo.setCargo_type(rs.getString("cargo_type"));
-                
-                currentCargoSearchList.add(cargo);
-            }
-            
-        } catch (SQLException ex) {
-            Logger.getLogger(SearchController.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            try {
-                if (stmt != null) {
-                    stmt.close();
-                }
-                if (rs != null) {
-                    rs.close();
-                }
-                if (conn != null) {
-                    conn.close();
-                }
-            } catch (SQLException ex) {
-                Logger.getLogger(SearchController.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-    }
-    //---------------------------------
-    */
-    
-    
-    
      private void SQL(String sql) {
         //System.out.print(sql);
    
@@ -643,7 +543,13 @@ public class SearchController implements Serializable{
     
     private void fillPageNumbers(long totalBooksCount, int booksCountOnPage) {
 
-        int pageCount = booksCountOnPage > 0 ? (int) ((totalBooksCount / booksCountOnPage) + 1) : 0;
+        int pageCount = 0;
+
+        if (totalBooksCount % booksCountOnPage == 0) {
+            pageCount = booksCountOnPage > 0 ? (int) (totalBooksCount / booksCountOnPage) : 0;
+        } else {
+            pageCount = booksCountOnPage > 0 ? (int) (totalBooksCount / booksCountOnPage) + 1 : 0;
+        }
 
         pageNumbers.clear();
         for (int i = 1; i <= pageCount; i++) {
@@ -654,7 +560,13 @@ public class SearchController implements Serializable{
     //-
     private void fillSearchPageNumbers(long totalBooksCount, int booksCountOnPage) {
 
-        int pageCount = booksCountOnPage > 0 ? (int) ((totalBooksCount / booksCountOnPage) + 1) : 0;
+        int pageCount = 0;
+
+        if (totalBooksCount % booksCountOnPage == 0) {
+            pageCount = booksCountOnPage > 0 ? (int) (totalBooksCount / booksCountOnPage) : 0;
+        } else {
+            pageCount = booksCountOnPage > 0 ? (int) (totalBooksCount / booksCountOnPage) + 1 : 0;
+        }
 
         pageSearchNumbers.clear();
         for (int i = 1; i <= pageCount; i++) {
