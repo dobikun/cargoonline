@@ -30,35 +30,40 @@
                     <div class="btn-group" >
                         <div class="text-center">
                             <h:form id="paginator">
-                                <ui:repeat value="#{searchController.pageNumbers}" var="pageNumber" >
-                                    <h:commandLink value="#{pageNumber}" class="btn btn-default #{pageNumber == searchController.selectedPageNumber ? 'active' : ''}">
-                                        <f:param name="page_number" value="#{pageNumber}" />
-                                        
-                                        <!-- AJAX request -->
-                                        <f:ajax event="click" render=":mainContent @form :paginator" listener="#{searchController.selectPage()}"/>
-                                    </h:commandLink>
-                                </ui:repeat>
                                 
-                                <!-- -->
-                                
-                                <ui:repeat value="#{searchController.pageSearchNumbers}" var="pageNumber" >
-                                    <h:commandLink value="#{pageNumber}" class="btn btn-default #{pageNumber == searchController.selectedSearchPageNumber ? 'active' : ''}">
-                                        <f:param name="page_number" value="#{pageNumber}" />
-                                       
-                                        <!-- AJAX request -->
-                                        <f:ajax event="click" render=":mainContent @form :paginator" listener="#{searchController.selectSearchPage()}"/>
-                                    </h:commandLink>
-                                </ui:repeat>
+                                <div class="#{searchController.totalRowCount() == 0 || searchController.totalRowCount() == 1 || searchController.totalRowCount() == 2 ? 'notFound' : ''}">
+                                    <ui:repeat value="#{searchController.pageNumbers}" var="pageNumber" >
+                                        <h:commandLink value="#{pageNumber}" class="btn btn-default #{pageNumber == searchController.selectedPageNumber ? 'active' : ''}">
+                                            <f:param name="page_number" value="#{pageNumber}" />
+
+                                            <!-- AJAX request -->
+                                            <f:ajax event="click" render=":mainContent @form :paginator" listener="#{searchController.selectPage()}"/>
+                                        </h:commandLink>
+                                    </ui:repeat>
+
+                                    <!-- -->
+
+                                    <ui:repeat value="#{searchController.pageSearchNumbers}" var="pageNumber" >
+                                        <h:commandLink value="#{pageNumber}" class="btn btn-default #{pageNumber == searchController.selectedSearchPageNumber ? 'active' : ''}">
+                                            <f:param name="page_number" value="#{pageNumber}" />
+
+                                            <!-- AJAX request -->
+                                            <f:ajax event="click" render=":mainContent @form :paginator" listener="#{searchController.selectSearchPage()}"/>
+                                        </h:commandLink>
+                                    </ui:repeat>
 
 
-                                <div class="btn-group" >
-                                    <select class="form-control" >
-                                        <option>1</option>
-                                        <option>2</option>
-                                        <option>3</option>
-                                        <option>4</option>
-                                        <option>5</option>
-                                    </select>
+                                    <!--
+                                    <div class="btn-group" >
+                                        <select class="form-control" >
+                                            <option>1</option>
+                                            <option>2</option>
+                                            <option>3</option>
+                                            <option>4</option>
+                                            <option>5</option>
+                                        </select>
+                                    </div>
+                                    -->
                                 </div>
                             </h:form>
                         </div>

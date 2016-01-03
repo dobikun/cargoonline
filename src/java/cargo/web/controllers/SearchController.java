@@ -45,10 +45,10 @@ public class SearchController implements Serializable{
     private Integer typeId; //typeList 
 
 
-    private long totalCount; // общее кол-во книг (не на текущей странице, а всего)
+    private int totalCount; // общее кол-во книг (не на текущей странице, а всего)
 
         //-
-         private long totalSearchCount;
+         private int totalSearchCount;
 
         //-
             //--
@@ -693,12 +693,14 @@ public class SearchController implements Serializable{
         }
         
         
-        public Long totalRowCount() {
+        public int totalRowCount() {
             if(totalCount != 0){
                 return totalCount;
-            } else {
+            } if(totalSearchCount != 0){
                 return totalSearchCount;
             }
+            
+            return 0;
         }
         
         //-
@@ -783,7 +785,7 @@ public class SearchController implements Serializable{
     public long getTotalCount() {
         return totalCount;
     }
-    public void setTotalCount(long totalCount) {
+    public void setTotalCount(int totalCount) {
         this.totalCount = totalCount;
     }
     
@@ -792,7 +794,7 @@ public class SearchController implements Serializable{
         return totalSearchCount;
     }
 
-    public void setTotalSearchCount(long totalSearchCount) {
+    public void setTotalSearchCount(int totalSearchCount) {
         this.totalSearchCount = totalSearchCount;
     }
     
