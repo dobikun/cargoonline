@@ -5,14 +5,13 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:f="http://java.sun.com/jsf/core">
     <h:head>
-        <title>Title maintemp</title> 
     </h:head>
     
     <h:body>
         <ui:composition template="/templates/template.xhtml">
             
             <ui:define name="title">
-                #{msg.book_list}
+                #{msg.cargo_list}
             </ui:define>
             
             <ui:define name="total_products">  </ui:define>
@@ -47,7 +46,7 @@
                                 <h:outputText value="#{param['letter']}" />
                                 
                                 <div class="input-mysize">
-                                    <h:commandButton action="/pages/maintemp?faces-redirect=true" class="btn btn-lg btn-primary btn-block" value="Back" />
+                                    <h:commandButton action="/pages/maintemp?faces-redirect=true" class="btn btn-lg btn-primary btn-block" value="#{msg.back}" />
                                 </div>
                                  
                             </h:column>

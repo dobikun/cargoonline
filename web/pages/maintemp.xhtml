@@ -5,14 +5,14 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:f="http://java.sun.com/jsf/core">
     <h:head>
-        <title>Title maintemp</title> 
+  
     </h:head>
     
     <h:body>
         <ui:composition template="/templates/template.xhtml">
 
             <ui:define name="title">
-                #{msg.book_list}
+                #{msg.cargo_list}
             </ui:define>
             
             <ui:define name="total_products">
@@ -20,7 +20,7 @@
                     <div class="col-md-20">
                         <!-- Renew cargo list -->
                         #{searchController.renewCurrentCargoList()}
-                        <kbd> #{msg.book_count} #{searchController.totalRowCount()} </kbd>
+                        <kbd> #{msg.cargo_count} #{searchController.totalRowCount()} </kbd>
                     </div>
                 </h:form>
             </ui:define>
@@ -82,7 +82,7 @@
                         <div class="col-md-20">
                             <h2> <p> #{cargo.name}</p> </h2>
                             <p> #{cargo.desc}</p>
-                            <h:commandLink action="#{searchController.fillContentPage()}" class="btn btn-info" value="View details">
+                            <h:commandLink action="#{searchController.fillContentPage()}" class="btn btn-info" value="#{msg.btn_view}">
                                 <f:param name="cargo_id" value="#{cargo.id}" />
                             </h:commandLink>
                         </div>
@@ -94,7 +94,7 @@
                         <div class="col-md-20">
                             <h2> <p> #{cargo.name}</p> </h2>
                             <p> #{cargo.desc}</p>
-                            <h:commandLink action="#{searchController.fillContentPage()}" class="btn btn-info" value="View details">
+                            <h:commandLink action="#{searchController.fillContentPage()}" class="btn btn-info" value="#{msg.btn_view}">
                                 <f:param name="cargo_id" value="#{cargo.id}" />
                             </h:commandLink>
                         </div>

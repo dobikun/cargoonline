@@ -15,7 +15,7 @@
     </h:head>
     <h:body>
         
-        <div class="container">
+        <div class="containe">
             <h:form class="form-signin" role="form">
               <h2 class="form-signin-heading">#{msg.input_info}</h2>
                 
@@ -25,17 +25,19 @@
                      <!-- AJAX request -->
                      <f:ajax event="keyup" render="loginError"/>
                 </h:inputText> 
-                    
-                <h:inputSecret  class="form-control" />
-
-              <h:commandButton action="pages/maintemp?faces-redirect=true" class="btn btn-lg btn-primary btn-block" value="Войти" onclick="return checkValue(this.form, '#{msg.login_required}');" />
-
+                
               <br />
 
-              <h:message id="loginError" for="username" class="alert alert-danger" role="alert"/>
+              <h:commandButton action="pages/maintemp?faces-redirect=true" class="btn btn-lg btn-primary btn-block" value="#{msg.entry}" onclick="return checkValue(this.form, '#{msg.login_required}');" />
+
+              <br />
+              <br />
+
+             <h:message id="loginError" for="username" class="alert alert-danger" role="alert"/>
    
             </h:form>
-        </div> <!-- /container -->
+             
+        </div>
         
     </h:body>
 </html>
