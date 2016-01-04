@@ -22,6 +22,8 @@ public class Cargo implements Serializable {
     private int dateYear;
     private int companyId;
     private String desc;
+    private String short_des;
+
     private byte[] image;
     private String cars;
     private String company;
@@ -33,6 +35,14 @@ public class Cargo implements Serializable {
 
     public String getCompany() {
         return company;
+    }
+    
+    public String getShort_desc() {
+        return short_des;
+    }
+
+    public void setShort_desc(String short_desc) {
+        this.short_des = short_desc;
     }
 
     public String getCargo_type() {

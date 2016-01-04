@@ -111,6 +111,7 @@ public class SearchController implements Serializable{
                 cargo.setCtypeId(rs.getInt("ctype_id"));
                 cargo.setDateYear(rs.getInt("date_year"));
                 cargo.setDesc(rs.getString("desc"));
+               // cargo.setShort_desc(rs.getString("short_des"));
                 cargo.setName(rs.getString("name"));
                 cargo.setTripCount(rs.getInt("trip_count"));
                 cargo.setTripNumber(rs.getInt("trip_number"));

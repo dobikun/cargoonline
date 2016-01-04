@@ -22,50 +22,40 @@
             </ui:define>
              
             <ui:define name="main">
-                
-                <div class="col-md-8">  
-                    
-                    <!--<h:outputText value="#{param['cargo_id']}" />-->
-                    
-                    <h:outputText value="#{searchController.currentCargoList.size()}" />
-                    
                     <h:form>
-                        <h:dataTable value="#{searchController.currentCargoList}" var="cargo"> 
-
+                        <h:dataTable value="#{searchController.currentCargoList}" var="cargo" > 
                             <h:column>
-                                
-                                <h:graphicImage  value="/Image?id=#{cargo.id}" style="align: middle;" />
-                                
                                 <div class="col-md-20">
-                                    <h2> #{cargo.name}</h2>
-                                    <p> #{cargo.desc}</p>
-                                    <br />
+                                <h:graphicImage  value="/Image?id=#{cargo.id}" style="width: 300px; height: 200px;" />
                                 </div>
                                 
-                 
-                                <h:outputText value="#{param['letter']}" />
-                                
+                                <br/>
+
+                                <div class="col-md-20">
+                                <h3><h:outputLink value="#{request.contextPath}/PdfContent?id=#{cargo.id}" target="_blank"> View PDF report</h:outputLink></h3> 
+                                <div class="col-md-3">
+                                    <h4><b>Car:</b>  #{cargo.cars} </h4>
+                                </div>
+                                <div class="col-md-3">
+                                   <h4><b> Company: </b>  #{cargo.company} </h4>
+                                </div>
+                                <div class="col-md-3">
+                                   <h4><b> Cargo:</b>  #{cargo.cargo_type} </h4>
+                                </div>
+                                <div class="col-md-3">
+                                     <h4><b> Trips:</b>  #{cargo.tripCount} </h4>
+                                </div>
+
+                                <p class="text-justify">#{cargo.desc}</p>
+                                    <br />
                                 <div class="input-mysize">
                                     <h:commandButton action="/pages/maintemp?faces-redirect=true" class="btn btn-lg btn-primary btn-block" value="#{msg.back}" />
                                 </div>
-                                 
-                            </h:column>
-
-                            <h:column>
-                                <p> <h:outputLink value="#{request.contextPath}/PdfContent?id=#{cargo.id}" target="_blank">#{cargo.name} </h:outputLink></p>
-
-                                <h2>TEST:  #{cargo.cars}</h2>
-                                <h2>TEST:  #{cargo.company}</h2>
-                                <h2>TEST:  #{cargo.cargo_type}</h2>
-                                <h2>TEST:  #{cargo.tripCount}</h2>
-                            </h:column>
-                                
-                            
+                                </div>
+                            </h:column>      
                         </h:dataTable>
                     </h:form>
-                </div>  
             </ui:define>
-            
         </ui:composition>
     </h:body>
 </html>
