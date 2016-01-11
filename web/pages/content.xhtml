@@ -32,24 +32,24 @@
                                 <br/>
 
                                 <div class="col-md-20">
-                                <h3><h:outputLink value="#{request.contextPath}/PdfContent?id=#{cargo.id}" target="_blank"> View PDF report</h:outputLink></h3> 
+                                <h3><h:outputLink value="#{request.contextPath}/PdfContent?id=#{cargo.id}" target="_blank">#{msg.pdf}</h:outputLink></h3> 
                                 <div class="col-md-3">
-                                    <h4><b>Car:</b>  #{cargo.cars} </h4>
+                                    <h4><b>#{msg.car}:</b>  #{cargo.cars} </h4>
                                 </div>
                                 <div class="col-md-3">
-                                   <h4><b> Company: </b>  #{cargo.company} </h4>
+                                   <h4><b>#{msg.company}:</b>  #{cargo.company} </h4>
                                 </div>
                                 <div class="col-md-3">
-                                   <h4><b> Cargo:</b>  #{cargo.cargo_type} </h4>
+                                   <h4><b>#{msg.cargo}:</b>  #{cargo.cargo_type} </h4>
                                 </div>
                                 <div class="col-md-3">
-                                     <h4><b> Trips:</b>  #{cargo.tripCount} </h4>
+                                     <h4><b>#{msg.trips}:</b>  #{cargo.tripCount} </h4>
                                 </div>
 
                                 <p class="text-justify">#{cargo.desc}</p>
                                     <br />
                                 <div class="input-mysize">
-                                    <h:commandButton action="/pages/maintemp?faces-redirect=true" class="btn btn-lg btn-primary btn-block" value="#{msg.back}" />
+                                    <h:commandButton action="/pages/main?faces-redirect=true" class="btn btn-lg btn-primary btn-block" value="#{msg.back}" />
                                 </div>
                                 </div>
                             </h:column>      

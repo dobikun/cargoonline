@@ -17,6 +17,7 @@ import java.util.logging.Logger;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.event.ValueChangeEvent;
 
 /**
  *
@@ -33,31 +34,20 @@ public class SearchController implements Serializable{
     private static Map<String, SearchType> searchList = new HashMap<String, SearchType>();
     private ArrayList<Cargo> currentCargoList;
     private ArrayList<Cargo> currentCargoSearchList;
-    private String searchString;
-    //02.01
+    private String searchString; //value in search text
     private char searchLetter; //Selected letter
-    //02.01
     private Integer typeId; //typeList 
-
-
     private int totalCount; // total cargo entries
     private int totalSearchCount;
 
     private ArrayList<Integer> pageNumbers = new ArrayList<Integer>(); // total pagination numbers
-        //-
-        private ArrayList<Integer> pageSearchNumbers = new ArrayList<Integer>();
-        //-
+    private ArrayList<Integer> pageSearchNumbers = new ArrayList<Integer>();
     private String currentSql;// last sql query without limit
-        //-
-        private String currentSearchSql;// last search sql query without limit
-        //-
+    private String currentSearchSql;// last search sql query without limit
     private long selectedPageNumber = 1; // selected page namber in pagination
-        //-
-        private long selectedSearchPageNumber = 1;
-        //-
+    private long selectedSearchPageNumber = 1;
 
     public SearchController() {
-        dropMenuSearchType();
         cargoAll();
     }
     
@@ -76,8 +66,7 @@ public class SearchController implements Serializable{
         //System.out.print(sql);
         StringBuilder sqlBuilder = new StringBuilder(sql);
         currentSql = sql;
-        
-        
+
         Statement stmt = null;
         ResultSet rs = null;
         Connection conn = null;
@@ -111,7 +100,7 @@ public class SearchController implements Serializable{
                 cargo.setCtypeId(rs.getInt("ctype_id"));
                 cargo.setDateYear(rs.getInt("date_year"));
                 cargo.setDesc(rs.getString("desc"));
-               // cargo.setShort_desc(rs.getString("short_des"));
+                // cargo.setShort_desc(rs.getString("short_des"));
                 cargo.setName(rs.getString("name"));
                 cargo.setTripCount(rs.getInt("trip_count"));
                 cargo.setTripNumber(rs.getInt("trip_number"));
@@ -172,9 +161,7 @@ public class SearchController implements Serializable{
             if (totalSearchCount > booksOnPage) {
                  sqlBuilder.append(" limit ").append(selectedSearchPageNumber * booksOnPage - booksOnPage).append(",").append(booksOnPage);
             }
-            
-            System.out.println("HRRRRRR" + sqlBuilder.toString());
-            
+
             rs = stmt.executeQuery(sqlBuilder.toString());
             
             currentCargoSearchList = new ArrayList<Cargo>();
@@ -266,71 +253,12 @@ public class SearchController implements Serializable{
             }
         }
     }
-     
-     /*
-     private void searchSQL(String sql) {
-        //System.out.print(sql);
-   
-        Statement stmt = null;
-        ResultSet rs = null;
-        Connection conn = null;
-        
-        try {
-            currentCargoSearchList = new ArrayList<Cargo>();
-            
-            conn = Database.getConnection();
-            stmt = conn.createStatement();
-            rs = stmt.executeQuery(sql);
 
-            while (rs.next()) {
-                Cargo cargo = new Cargo();
-                cargo.setId(rs.getLong("id"));
-                cargo.setCompanyId(rs.getInt("company_id"));
-                cargo.setCtypeId(rs.getInt("ctype_id"));
-                cargo.setDateYear(rs.getInt("date_year"));
-                cargo.setDesc(rs.getString("desc"));
-                cargo.setName(rs.getString("name"));
-                cargo.setTripCount(rs.getInt("trip_count"));
-                cargo.setTripNumber(rs.getInt("trip_number"));
-                
-                cargo.setCars(rs.getString("cars"));
-                cargo.setCompany(rs.getString("company"));
-                cargo.setCargo_type(rs.getString("cargo_type"));
-                
-                currentCargoSearchList.add(cargo);
-            }
-            
-        } catch (SQLException ex) {
-            Logger.getLogger(SearchController.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            try {
-                if (stmt != null) {
-                    stmt.close();
-                }
-                if (rs != null) {
-                    rs.close();
-                }
-                if (conn != null) {
-                    conn.close();
-                }
-            } catch (SQLException ex) {
-                Logger.getLogger(SearchController.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-    }
-    */
-    
-    
-    
     /* SQL QUERIES*/
-    
     public void cargoAll() {
 
-        //------
         pageSearchNumbers = new ArrayList<Integer>();     
-        //-----
         currentCargoSearchList = null; 
-        //02.01
         searchLetter = '*';
         typeId = 0;
         
@@ -349,15 +277,10 @@ public class SearchController implements Serializable{
        
     public String letterSearch() {
         
-        //-----
         currentCargoList = null;  
-        //-----
         pageNumbers = new ArrayList<Integer>();
-        //
         selectedSearchPageNumber = 1;
-        //02.01
         typeId = 0;
-        //02.01
         totalCount = 0;
         
         Map<String, String> param = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
@@ -395,13 +318,11 @@ public class SearchController implements Serializable{
             + " where g.id= " + cargo_id + ""
         );
         
-        
         return "/pages/content?faces-redirect=true";
     }
     
     public String fillSearchContentPage() {
-        
-        //-----
+
         currentCargoSearchList = null; 
         
         Map<String, String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
@@ -423,22 +344,14 @@ public class SearchController implements Serializable{
     }
     
      public String fillSearchByCar() {
-        
-        //-----
+
         currentCargoList = null;  
-        //-----
         pageNumbers = new ArrayList<Integer>();
-        //
         selectedSearchPageNumber = 1;
-        //02.01
         selectedPageNumber = 1;
-        //02.01
         searchLetter = '*';
-        //02.01
         typeId = 0;
-        //02.01
         totalCount = 0;
-        
          
         Map<String, String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
         typeId = Integer.valueOf(params.get("id"));
@@ -455,26 +368,17 @@ public class SearchController implements Serializable{
             + " where g.car_id= " + typeId + ""
         );
         
-        
         return "/pages/search_all?id=" + typeId + "&faces-redirect=true";
     }
      
      public String fillCargoBySearch() {
-         
-        //-----
+
         currentCargoList = null;  
-        //-----
         pageNumbers = new ArrayList<Integer>();
-        //
         selectedSearchPageNumber = 1;
-        //02.01
         searchLetter = '*';
-        //02.01
         typeId = 0;
-        //02.01
         totalCount = 0;
-        
-        
 
         if (searchString.trim().length() == 0) {
             cargoAll();
@@ -535,13 +439,6 @@ public class SearchController implements Serializable{
         return letters;
     }
     
-    public void dropMenuSearchType() {
-        ResourceBundle bundle = ResourceBundle.getBundle("cargo.web.prop.messages", FacesContext.getCurrentInstance().getViewRoot().getLocale());
-        searchList.put(bundle.getString("company_name"), SearchType.COMPANY);
-        searchList.put(bundle.getString("cars_name"), SearchType.CARS);
-        searchList.put(bundle.getString("cargo_type_name"), SearchType.CARGO_TYPE);
-    }
-    
     private void fillPageNumbers(long totalBooksCount, int booksCountOnPage) {
 
         int pageCount = 0;
@@ -557,8 +454,7 @@ public class SearchController implements Serializable{
             pageNumbers.add(i);
         }
     }
-    
-    //-
+
     private void fillSearchPageNumbers(long totalBooksCount, int booksCountOnPage) {
 
         int pageCount = 0;
@@ -574,7 +470,6 @@ public class SearchController implements Serializable{
             pageSearchNumbers.add(i);
         }
     }
-    //-
 
     public void selectPage() {
         
@@ -584,43 +479,45 @@ public class SearchController implements Serializable{
         cargoTableSQL(currentSql);
     }
 
-        //-
-        public void selectSearchPage() {
-   
-            
-            Map<String, String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
-            selectedSearchPageNumber = Integer.valueOf(params.get("page_number"));
-            requestFromSearchPager = true;
-            cargoSearchSQL(currentSearchSql);
-        }
+    public void selectSearchPage() {
+
+        Map<String, String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+        selectedSearchPageNumber = Integer.valueOf(params.get("page_number"));
+        requestFromSearchPager = true;
+        cargoSearchSQL(currentSearchSql);
+    }
         
         
-        public int totalRowCount() {
-            if(totalCount != 0){
-                return totalCount;
-            } if(totalSearchCount != 0){
-                return totalSearchCount;
-            }
-            
-            return 0;
-        }
-        
-        //-
-        //-
-        public ArrayList<Integer> getPageSearchNumbers() {
-            return pageSearchNumbers;
+    public int totalRowCount() {
+        if(totalCount != 0){
+            return totalCount;
+        } if(totalSearchCount != 0){
+            return totalSearchCount;
         }
 
-        public void setPageSearchNumbers(ArrayList<Integer> pageSearchNumbers) {
-            this.pageSearchNumbers = pageSearchNumbers;
-        }
-        //-
+        return 0;
+    }
+        
+    public void searchStringChanged(ValueChangeEvent e) {
+    searchString = e.getNewValue().toString();
+    }
+
+    public void searchTypeChanged(ValueChangeEvent e) {
+        searchType = (SearchType) e.getNewValue();
+    }
+
+    public ArrayList<Integer> getPageSearchNumbers() {
+        return pageSearchNumbers;
+    }
+
+    public void setPageSearchNumbers(ArrayList<Integer> pageSearchNumbers) {
+        this.pageSearchNumbers = pageSearchNumbers;
+    }
     
     public ArrayList<Integer> getPageNumbers() {
         return pageNumbers;
     }
-    
-    
+
     public String getSearchString() {
         return searchString;
     }
@@ -658,8 +555,7 @@ public class SearchController implements Serializable{
     public void setSearchLetter(char searchLetter) {
         this.searchLetter = searchLetter;
     }
-    
-    //02.01
+
     public Integer getTypeId() {
         return typeId;
     }
@@ -667,31 +563,27 @@ public class SearchController implements Serializable{
         this.typeId = typeId;
     }
 
-    //02.01
     public long getSelectedSearchPageNumber() {
         return selectedSearchPageNumber;
     }
     public void setSelectedSearchPageNumber(long selectedSearchPageNumber) {
         this.selectedSearchPageNumber = selectedSearchPageNumber;
     }
-    
-    //02.01
+
     public long getSelectedPageNumber() {
         return selectedPageNumber;
     }
     public void setSelectedPageNumber(long selectedPageNumber) {
         this.selectedPageNumber = selectedPageNumber;
     }
-    
-    //02.01
+
     public long getTotalCount() {
         return totalCount;
     }
     public void setTotalCount(int totalCount) {
         this.totalCount = totalCount;
     }
-    
-    //02.01
+
     public long getTotalSearchCount() {
         return totalSearchCount;
     }
@@ -774,10 +666,7 @@ public class SearchController implements Serializable{
                         .getName()).log(Level.SEVERE, null, ex);
             }
         }
-        
-        System.out.print(content.toString());
 
         return content;
-
     }
 }

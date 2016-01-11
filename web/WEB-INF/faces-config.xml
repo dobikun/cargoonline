@@ -9,16 +9,17 @@
         <base-name>cargo.web.prop.messages</base-name>
         <var>msg</var>
     </resource-bundle>
-</application>
+</application> 
+
     <navigation-rule>
         <from-view-id>/index.xhtml</from-view-id>
         <navigation-case>
             <from-outcome>case1</from-outcome>
-            <to-view-id>pages/maintemp.xhtml</to-view-id>
+            <to-view-id>pages/main.xhtml</to-view-id>
         </navigation-case>
     </navigation-rule>
     <navigation-rule>
-        <from-view-id>pages/maintemp.xhtml</from-view-id>
+        <from-view-id>pages/main.xhtml</from-view-id>
         <navigation-case>
             <from-outcome>case1</from-outcome>
             <to-view-id>pages/content.xhtml</to-view-id>
@@ -28,7 +29,7 @@
         <from-view-id>/pages/content.xhtml</from-view-id>
         <navigation-case>
             <from-outcome>case1</from-outcome>
-            <to-view-id>/pages/maintemp.xhtml</to-view-id>
+            <to-view-id>/pages/main.xhtml</to-view-id>
         </navigation-case>
     </navigation-rule>
 </faces-config>

@@ -4,6 +4,8 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html" 
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:f="http://java.sun.com/jsf/core">
+    
+    <f:view locale="#{localeChanger.currentLocale}">
     <h:head>     
         <meta charset="utf-8"></meta>
         <title> </title>
@@ -14,27 +16,24 @@
             <div class="col-md-2">
                 <!-- Menu -->    
                 <h2> 
-                    <h:commandLink  class="btn btn-lg btn-info btn-block" value="Home">
+                    <h:commandLink  class="btn btn-lg btn-info btn-block" value="#{msg.home}">
                         <!-- AJAX request -->
                         <f:ajax  event="click" render=":mainContent @form :paginator :topNav :total_products" listener="#{searchController.cargoAll()}"/>
                     </h:commandLink>
                 </h2>
                 <div class="list-group">
-
-                <!-- -->
-  
-                <ui:repeat value="#{carType.typeList}" var="v">   
-                    <h:commandLink  value="#{v.name}" class="list-group-item input-mysize #{v.id == searchController.typeId ? 'active' : ''}">
-                        <f:param name="id" value="#{v.id}"/>
-                   
-                        <!-- AJAX request -->
-                        <f:ajax  event="click" render=":mainContent @form :paginator :topNav :total_products" listener="#{searchController.fillSearchByCar()}"/>
-                    </h:commandLink>
-                </ui:repeat>
-                    </div>
+                    <ui:repeat value="#{carType.typeList}" var="v">   
+                        <h:commandLink  value="#{v.name}" class="list-group-item input-mysize #{v.id == searchController.typeId ? 'active' : ''}">
+                            <f:param name="id" value="#{v.id}"/>
+                            <!-- AJAX request -->
+                            <f:ajax  event="click" render=":mainContent @form :paginator :topNav :total_products" listener="#{searchController.fillSearchByCar()}"/>
+                        </h:commandLink>
+                    </ui:repeat>
+                </div>
                  <!-- End of menu -->   
             </div>
         </h:form>
     </h:body>
+    </f:view>
 </html>
         

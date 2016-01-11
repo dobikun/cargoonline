@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package cargo.web.beans;
 
 import cargo.web.beans.Type;
@@ -69,7 +64,6 @@ public class CarType implements Serializable{
     }
     
     public ArrayList<Type> getTypeList() {
-        System.out.println("asdasd");
         if (!typeList.isEmpty()) {
             return typeList;
         } else {

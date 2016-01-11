@@ -5,6 +5,8 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:p="http://xmlns.jcp.org/jsf/passthrough">
+    
+    <f:view locale="#{localeChanger.currentLocale}">
     <h:head>     
         <meta charset="utf-8"></meta>
         <title> </title>
@@ -12,53 +14,35 @@
     <h:body>
         
         <ui:composition>
-            
-            <!-- Navigation -->
+        <!-- Navigation -->
         <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
             <div class="container">
-                <div class="navbar-header">
-
-                   <!--
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                      <span class="sr-only">Toggle navigation</span>
-                      <span class="icon-bar"></span>
-                      <span class="icon-bar"></span>
-                      <span class="icon-bar"></span>
-                    </button>
-                    -->
-                </div>
+                <div class="navbar-header"></div>
                 
                 <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
 			<li>
+                            <ui:include src="/templates/locales.xhtml"/>
                             <h:form>    
-                                <h5>#{msg.welcome},  #{user.username}</h5>
-                                <h:commandLink action="#{loginController.exit()}" value="#{msg.exit}"/>
-
-                                <!--
-                                <h:form class="navbar-form navbar-right" role="form">
-                                    <button type="submit" class="btn btn-success">Sign in</button>
-                                </h:form>
-                                 -->
+                                <h5>#{msg.welcome},  #{user.username} &#160;&#160;&#160;&#160;
+                                    <h:commandLink action="#{loginController.exit()}" value="#{msg.exit}"/>
+                                </h5>
                             </h:form>
 			</li>
                     </ul>
-                
-                
+
                     <h:form class="navbar-form navbar-right form-inline" role="form">
                         <div class="form-group ">
-
-                            <h:inputText id="search_string" p:placeholder="Search text" class="form-control"  size="58"  value="#{searchController.searchString}" />
-         
+                            <h:inputText id="search_string" p:placeholder="#{msg.ser_txt}" class="form-control"  size="58" value="#{searchController.searchString}"  valueChangeListener="#{searchController.searchStringChanged}">
+                                <f:ajax  event="change" />
+                            </h:inputText>
                             &#160;
-                            
-                            <h:selectOneMenu value="#{searchController.searchType}" class="form-control">
-                                <f:selectItems value="#{searchController.searchList}" />
+                            <h:selectOneMenu value="#{searchController.searchType}" class="form-control" valueChangeListener="#{searchController.searchStringChanged}">
+                                <f:selectItems value="#{searchTypeController.searchList}" />
+                                <f:ajax  event="change" />
                             </h:selectOneMenu>
-                             
                             &#160;
                             <h:commandLink  class="btn btn-success" value="#{msg.search}">
-                        
                                 <!-- AJAX request -->
                                 <f:ajax  execute="@form" render=":mainContent @form :paginator :topNav :leftMenu :total_products" listener="#{searchController.fillCargoBySearch()}"/>
                             </h:commandLink>
@@ -73,14 +57,12 @@
         <div class="container">
             <div class="masthead">
                 <hr />
-
                 <h:form id="topNav">
                     <ul class="nav nav-justified">
                         <ui:repeat value="#{searchController.letters}" var="letter">
                             <li class="#{letter == searchController.searchLetter ? 'active':''}">
                                 <h:commandLink value="#{letter}">
                                     <f:param name="letter" value="#{letter}"/>
-                                    
                                     <!-- AJAX request -->
                                     <f:ajax  event="click" render=":mainContent @form :paginator :leftMenu :total_products" listener="#{searchController.letterSearch()}"/>
                                 </h:commandLink>
@@ -91,8 +73,7 @@
             </div>    
         </div>
         <!-- End of letter navigation -->
-            
         </ui:composition>
-        
     </h:body>
+    </f:view>
 </html>
